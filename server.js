@@ -21,6 +21,29 @@ var pool = mysql.createPool({
     database: 'atikuapp',
     debug: false
 });
+//var pool = mysql.createPool({
+//    connectionLimit: 100,
+//    host: '160.153.153.132',
+//    user: 'troguser',
+//    password: 'encryption123',
+//    database: 'atikuvotersapp',
+//    debug: false
+//});
+  pool.getConnection(function(err, connection) {
+        console.log(err+"-jjjj");
+        if (err) {
+            connection.release();
+         
+            return;
+        }
+        console.log("connected succesfully")
+        });
+        
+        
+pool.query("SELECT 'Hello, World!' AS hello", function(err, rows, fields) {
+  if(err) throw err;
+  console.log(rows[0].hello);
+});
 app.get("/", function(req, res) {
    res.sendFile(__dirname + '/index.html');
 });
