@@ -13,31 +13,32 @@ var cons = [];
 var allUsersId = [];
 var newUserNotify = [];
 var rec_id,x,y;
-var pool = mysql.createPool({
-    connectionLimit: 100,
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'atikuapp',
-    debug: false
-});
 //var pool = mysql.createPool({
 //    connectionLimit: 100,
-//    host: '160.153.153.132',
-//    user: 'troguser',
-//    password: 'encryption123',
-//    database: 'atikuvotersapp',
+//    host: 'localhost',
+//    user: 'root',
+//    password: '',
+//    database: 'atikuapp',
 //    debug: false
 //});
-  pool.getConnection(function(err, connection) {
-        console.log(err+"-jjjj");
-        if (err) {
-            connection.release();
-         
-            return;
-        }
-        console.log("connected succesfully")
-        });
+var pool = mysql.createPool({
+    connectionLimit: 100,
+    host: 'atikuvotersapp.org',
+    user: 'troguser',
+    password: 'encryption123',
+    database: 'atikuvotersapp',
+    port: 3306,
+    debug: false
+});
+//  pool.getConnection(function(err, connection) {
+//        console.log(err+"-jjjj");
+//        if (err) {
+//            connection.release();
+//         
+//            return;
+//        }
+//        console.log("connected succesfully")
+//        });
         
         
 pool.query("SELECT 'Hello, World!' AS hello", function(err, rows, fields) {
