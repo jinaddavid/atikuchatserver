@@ -41,10 +41,10 @@ var pool = mysql.createPool({
 //        });
         
         
-pool.query("SELECT 'Hello, World!' AS hello", function(err, rows, fields) {
-  if(err) throw err;
-  console.log(rows[0].hello);
-});
+//pool.query("SELECT 'Hello, World!' AS hello", function(err, rows, fields) {
+//  if(err) throw err;
+//  console.log(rows[0].hello);
+//});
 app.get("/", function(req, res) {
    res.sendFile(__dirname + '/index.html');
 });
