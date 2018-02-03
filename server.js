@@ -933,7 +933,9 @@ function putinplace(str, insertstr, pos) {
     console.log("positoion :" + pos);
     return str.substr(0, pos) + insertstr + str.substr(pos);
 }
-
-http.listen(3001, function() {
-    console.log("listening on port 3001");
+var port = process.env.port || 3001;
+//console.log(port);
+//app.set('port', process.env.PORT || 3000);
+http.listen(port, function() {
+    console.log("listening on port "+port);
 });
