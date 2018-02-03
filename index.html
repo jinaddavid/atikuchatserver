@@ -1,0 +1,637 @@
+<html>
+  <head>
+    <title>Olango Test Chat</title>
+<!--    <script src="socket.io.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src = "client.js"></script>
+    <script>
+//    $(document).ready(function(){
+//          var socket = io();
+//          $("#add_status").click(function(){
+//            socket.emit('status added',$("#comment").val());
+//          });
+//          $("#add_status").click(function(){
+//            socket.emit('connection',$("#comment").val());
+//          });
+//          socket.on('refresh feed',function(msg){
+//            $("#show_comments").append(msg + '<br /><br />');
+//          });
+//    });
+    </script>
+  </head>
+  <body>
+      <div class="page-main">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <a class="pull-left" href="javascript:void(0)">
+              <i class="icon md-chevron-left" aria-hidden="true"></i>
+            </a>
+            <div class="text-right">
+              Conversation with June Lane
+              <a class="avatar margin-left-15" data-toggle="tooltip" href="#" data-placement="left"
+              title="June Lane">
+                <img src="../../../global/portraits/4.jpg" alt="...">
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <!-- Chat Box -->
+          <div class="chats-wrap">
+            <button type="button" id="historyBtn" class="btn btn-round btn-default">Load Old Messages</button>
+            <div class="chats">
+              <div class="chat">
+                <div class="chat-body">
+                  <div class="chat-content" data-toggle="tooltip" title="8:30 am">
+                    <p>
+                      Hello. What can I do for you?
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat chat-right">
+                <div class="chat-body">
+                  <div class="chat-content" data-toggle="tooltip" title="8:35 am">
+                    <p>
+                      I'm just looking around.
+                    </p>
+                    <p>Will you tell me something about yourself? </p>
+                  </div>
+                  <div class="chat-content" data-toggle="tooltip" title="8:40 am">
+                    <p>
+                      Are you there? That time!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat">
+                <div class="chat-body">
+                  <div class="chat-content" data-toggle="tooltip" title="8:35 am">
+                    <p>
+                      Where?
+                    </p>
+                  </div>
+                  <div class="chat-content" data-toggle="tooltip" title="8:42 am">
+                    <p>
+                      OK, my name is Limingqiang. I like singing, playing basketballand so on.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat chat-right">
+                <div class="chat-body">
+                  <div class="chat-content" data-toggle="tooltip" title="8:49 am">
+                    <p>You wait for notice.</p>
+                  </div>
+                  <div class="chat-content" data-toggle="tooltip" title="8:50 am">
+                    <p>Consectetuorem ipsum dolor sit?</p>
+                  </div>
+                  <div class="chat-content" data-toggle="tooltip" title="8:55 am">
+                    <p>OK?</p>
+                  </div>
+                </div>
+              </div>
+              <div class="chat">
+                <div class="chat-body">
+                  <div class="chat-content" data-toggle="tooltip" title="9:00 am">
+                    <p>OK!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- End Chat Box -->
+        </div>
+      </div>
+
+      <!-- Message Input-->
+      <!--<form class="app-message-input" action="#">-->
+        <div class="input-group form-material">
+          <span class="input-group-btn">
+            <a href="javascript: void(0)" class="btn btn-pure btn-default icon md-camera"></a>
+          </span>
+          <input class="form-control" type="text" placeholder="Type message here ..." id="msg_input_pm">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-pure btn-default icon md-mail-send"></button>
+          </span>
+        </div>
+      <!--</form>-->
+      <!-- End Message Input-->
+
+    </div> 
+
+
+      <!--<img src="http://localhost/atikuApi/uploads/userdp/default.jpg" alt="image" style="width:80px;height: 80px;" />-->
+<!--    <div id="comment_box" style = "padding:5%;">
+        <input type="text" id="msg_input_pm"> <br /><br />
+      <input type="button" id="add_status" value="send">
+    </div>
+      <div
+       id    = "show_comments"
+       class = "jumbotron"
+       style = "width: 38%;
+                height: 100%;
+                padding: 2%;
+                margin-left:5%;
+                margin-top:-53px;"
+     >
+      </div>-->
+      <script>
+          $(document).ready(function() {
+           
+//             
+              //    19
+//    user_id = "james@gmail.com";
+//      sender_name="james";
+//   22
+        user_id = "checkmate@email.com";
+ sender_name="ola";
+        //    user_id = "19";
+    sender = user_id ;//"tosyngy";//;
+//    sender_name = $("#user").val();
+    recid = sender;
+//      personal = "test@name.com";
+      current_chatting="james@gmail.com";
+
+});
+          ////alert("h");
+          var current_chatting = "";
+var iosocket, recid, recieving = "false";
+var user_details;
+var doctorlist, caller;
+var reject;
+var data, loca;
+var personal;
+var calltype;
+var user_id;
+var recordState = function(state) {
+    window.localStorage.setItem("loca", state);
+};
+
+var getState = function() {
+    return window.localStorage.getItem("loca");
+};
+
+var gotoLocation = function(addr) {
+    window.location = addr;
+};
+
+var conThread = function() {
+//    temp = window.localStorage.getItem("medslat_user_details");
+//    user_details = JSON.parse(temp);
+//    //alert(loca);
+
+//    if (user_details === null) {
+////        loca = "login";
+//        gotoLocation("login.html");
+//    } else {
+////        loca = getState();
+//    }
+
+    iosocket = io.connect('http://localhost:3001');
+//    personal = "checkmate@email.com";
+    personal = "chidima@gmail.com";
+//    19
+//    user_id = "APA91bFRtR8iGPPhWw_BSr3YuZok16K2zaw27Mrzc6wuAlOYIlNJchcujeBVnN2G0wVIaoL30VXKhBpfjWZFpx10XfJQFUj6HJ9G2lkOLkmQr5aiLPtFDRkQIisDeuRMeOQrD5_pE1ncCCc9y1JhTXXwDobAg327Mg";
+//   22
+        user_id = "APA91bGFPuMNVx-4CW0K1R3Qhr8243z4L0AchMvA1wnSpfHavzyTo5yhP270j6pVNbTuOWcC4sSsamtSaaMZ8bfaG5HYzigOa_dEo6SkJVybel010elI3vgHV8_mKFl9xfeCLbsSpY0ty83jX2LYEcHHBrJpD7kWEw";
+//    user_id = "19";
+//    
+//    em=personal;
+//    //alert(personal);
+    iosocket.on("connect", function(){
+//     iosocket.emit("register", recid);
+     iosocket.emit("register", user_id);
+            window.localStorage.setItem("my_id", user_id);
+    });
+  iosocket.on("note", function(data) {
+//        //alert(data);
+//      var user = new User(socket);
+console.log("here ooo"+data);
+    });
+
+
+    iosocket.on("users_update", function(array) {
+                var size = array.length;
+                console.log("online users" + size);
+                console.log(array);
+              // list all connected user to the node
+            });
+
+$(document).on('keyup', "#msg_input_pm", function(event) {
+    event.preventDefault();
+                console.log("event.keyCode: " + event.keyCode);
+                console.log(event);
+//                var doc = $("#receiver").val();
+//                var out = {
+//                    message: "typing...",
+//                    user1id: sender,
+//                    user1un: sender_name,
+//                    user2id: current_chatting,
+//                    status: 0,
+//                    time: ""
+//                };
+//                iosocket.emit("ty", out);
+console.log("here")
+                if (event.keyCode === 13) {
+                    var val = $("#msg_input_pm").val().trim();
+                    var lenght = val.length;
+                    if (lenght < 1) {
+                        alert('cannot send empty message');
+                        return;
+                    }
+                    event.preventDefault();
+                    var out = {
+                        message: val,
+                        user1id: sender,
+                        user1un: sender_name,
+                        user2id: current_chatting,
+                        status: 0,
+                        time: ""
+                    };
+                    iosocket.emit("pm", out);
+                    $('#msg_input_pm').text('');
+                }
+            });
+           
+
+
+
+
+
+
+
+
+
+
+    iosocket.on("callFailed", function(data) {
+        //alert("Call Failed!");
+        $("body").load("chat.html");
+    });
+
+    iosocket.on("videoRequestFailed", function(data) {
+        //alert("Call Failed!");
+//        window.location = "chat.html";
+        $("body").load("chat.html");
+    });
+    iosocket.on("audioRequestFailed", function(data) {
+        //alert("Call Failed!");
+//        window.location = "chat.html";
+        $("body").load("chat.html");
+    });
+
+
+
+    iosocket.on("call_ended_by_caller", function(name) {
+        //alert("call ended");
+//        iosocket.emit("call_finished", mi);
+        $("body").load("recent.html");
+    });
+
+
+
+    iosocket.on("videoRequestMobile", function(data) {
+        window.localStorage.setItem("in_video_id", data.from);
+        window.localStorage.setItem("in_video_un", data.user1un);
+//        window.location = "vid_in.html";
+        $("body").load("vid_in.html");
+    });
+    
+    iosocket.on("audioRequestMobile", function(data) {
+        //alert("incomming audio");
+        window.localStorage.setItem("in_audio_id", data.from);
+        window.localStorage.setItem("in_audio_un", data.user1un);
+//        window.location = "vid_in.html";
+        $("body").load("audio_in.html");
+    });
+
+    iosocket.on("vid_accepted", function(data_key) {
+//        //alert("data_key");
+        //alert(data_key);
+        window.localStorage.setItem("call_key", data_key);
+        $("body").load("talk.html");
+//        window.location = "";
+// $("body").load("http://localhost/mcr/vid?key=" + data_key);
+    });
+    
+    iosocket.on("audio_accepted", function(data_key) {
+//        //alert("data_key");
+        //alert(data_key);
+        window.localStorage.setItem("call_key", data_key);
+        $("body").load("talk_audio.html");
+//        window.location = "";
+// $("body").load("http://localhost/mcr/vid?key=" + data_key);
+    });
+
+    iosocket.on("video_rej", function(data_key) {
+        //alert("video rejected");
+
+//        window.location = "recent.html";
+        $("body").load("recent.html");
+
+    });
+
+    iosocket.on("vid_rejected", function(data) {
+
+//        window.location = "recent.html";
+        $("body").load("recent.html");
+    });
+    iosocket.on("audio_rejected", function(data) {
+
+//        window.location = "recent.html";
+        $("body").load("recent.html");
+    });
+
+  
+    iosocket.on("mobile_con_success", function(data) {
+        if (loca === "recent") {
+//            $.post("http://localhost/medslat/mobile/history", {mobile: true, id: recid},
+//            function(dee) {
+//                data = dee;
+//                var lupus = JSON.parse(data);
+//                $.each(lupus, function(key, data) {
+//                    console.log(key);
+//                    console.log(data);
+//                    $.post("http://localhost/medslat/mobile/uname2id", {username: key},
+//                    function(dee) {
+////                    
+////                <span class="photo">
+////                    <img class="img-circle img-rounded rec_dp" src="images/mem2.jpg" alt="avatar"></img>
+////                </span>
+////
+////                <div style="margin-left: 50px;width: 90%;">
+////                    <div class="subject">
+////                        <span class="from">jay</span>
+////                        <span class="time">40 minutes ago</span>
+////                    </div>
+////                    <div class="message">
+////                        xuppppppppppp htty sdfr rtt rt rtyrty ytrtyr
+////                    </div>
+////                </div>
+////            </jj>
+////        </div>
+//                        toadd = "<div class='history_item' rel='" + dee + "' rel_user='" + key + "'><jj href='#'><span class='photo'><img class='img-circle img-rounded rec_dp' alt='avatar' src='assets/img/ui-zac.jpg'></span>\n\
+//<div style='margin-left: 50px;width: 90%;'><div class='subject'>\n\
+//<span class='from'>" + key + "</span>\n\
+//<span class='time'>" + data[0]["time"] + "</span>\n\
+//</span>\n\
+//<div class='message'> " + data[0]["message"] +
+//                                "   </div></jj> </div>   ";
+//                        //alert(toadd);
+//                        $('#home').append($(toadd));
+//                    });
+//                });
+//            });
+        }
+
+        else if (loca === "chat") {
+//            var doc = window.localStorage.getItem("chat_with");
+////            //alert(doc);
+//
+//            var myself = user_details.tu;
+//
+////            var doc = window.m.getDoc();
+////            var myself = window.m.testB();
+//            $.post("http://localhost/medslat/mobile/uname2id", {username: myself},
+//            function(data_myself)
+//            {
+//                //                    //alert(data_myself);
+//                var recid_myself = data_myself;
+//                //            //alert("history  ");
+//                $.post("http://localhost/medslat/mobile/xhrloadPrevMsg", {user1id: data_myself, user2id: doc}, function(resp) {
+//                    history_each = resp;
+//                    console.log(history_each);
+//
+//                    $.post("http://localhost/medslat/mobile/id2uname", {username: doc},
+//                    function(username) {
+//
+//                        //                                $("#userhead").attr("ref",doc);
+//                        $("#userhead").text(username);
+//                    });
+//                    var lupus = JSON.parse(history_each);
+//                    $.each(lupus, function(doc, data) {
+//                        console.log(data);
+//
+//                        var me = parseInt(recid_myself);
+//                        var you = parseInt(doc);
+//
+//                        var user1 = parseInt(data.user1id);
+//                        var user2 = parseInt(data.user2id);
+//
+//                        if (me == user1 || you == user2) {
+//
+//                            $('.chat_board').append($("<div class='bubble_row'><div class=' outgoing_bubble  callout'>" + data.message + "</div> </div>"));
+//
+//                        }
+//                        else {
+//                            $('.chat_board').append($("<div class='bubble_row'><div class=' incomming_bubble  callout'>" + data.message + "</div></div>"));
+//                        }
+//
+////                        var wtf = $('.chat_board');
+////                        var height = wtf[0].scrollHeight;
+////                        wtf.scrollTop(height);
+////
+//                    });
+//                });
+//            });
+
+        }
+    });
+
+    iosocket.on('text', function(data) {
+        $('#chat').prepend($('<p>').text(data.username + ': ' + data.text));
+    });
+
+    iosocket.on('message', function(message) {
+//        alert("u av a new message");
+        alert(message.message)
+        console.log(message)
+        console.log(message.user1id)
+        var test = window.localStorage.getItem("chat_with");
+//        alert(test)
+        if (test == message.user1id) {
+            $('.chats').append($(" <div class='chat'><div class='chat-body'><div class='chat-content' data-toggle='tooltip' title='8:30 am'><p>"+message+"</p></div></div></div>"));
+            var wtf = $('#my_chat_body');
+            var height = wtf[0].scrollHeight;
+            wtf.scrollTop(height);
+        }
+//                if (test != message.user2un) {
+//                     if ($("#mspn_ph").val() == "") {
+//                     } else {
+//                         if (test !== message.user1un) {
+//                             var prev_notf = Number($("#mspn_ph").val());
+//                            $("#mspn").text(prev_notf + 1);
+//                            $("#mspn_ph").val(prev_notf + 1);
+//                            last_sender = message.user1un;
+//                        }
+//
+//                    }
+// 
+//                } else { 
+//                }
+    });
+
+    iosocket.on("user_in", function(data) {
+//        //alert(data);
+        user = data;
+        if (user.name === session_name) {
+            return;
+        }
+        var row = '<div  class="contact" id="display_' + user.name + '" pingId="' + user.name + '">'
+                + '<img src="' + user.dp + '" alt="" class="contact__photo" id="display_picture_' + user.name + '">'
+                + '<span class="contact__name ' + user.name + '">' + user.name + '</span>'
+                + ' <span class="contain_control">'
+                + ' <img class="call_pin btn_control" pingId="' + user.name + '" src="./images/1.png"> '
+                + ' <img class="vid_pin btn_control"  pingId="' + user.name + '" src="./images/2.png"> '
+                + '</span>'
+                + '</div>';
+        $(".contact_list").prepend(row);
+//        console.log(data);
+//      var user = new User(socket);
+    });
+
+    iosocket.on("wentOffline", function(name) {
+        $("#display_" + name).slideUp("slow");
+    });
+
+    iosocket.on("call_ended", function(name) {
+//         //alert("U ended call to "+name);
+        iosocket.emit("call_finished", mi);
+//        $("#display_" + name).slideUp("slow");
+    });
+
+
+    iosocket.on("missed_call", function(name) {
+//         //alert("missed call from "+name);
+        page = "contacts";
+        getMi(page);
+        iosocket.emit("call_finished", mi);
+//        $("#display_" + name).slideUp("slow");
+    });
+
+    iosocket.on("audio_call_accepted", function(name) {
+//        //alert("in call  " + name);
+
+//        con.emit("call_finished", mi);
+//        $("#display_" + name).slideUp("slow");
+    });
+
+    iosocket.on("audio_call_rejected", function(name) {
+//        $("#outgoing_overlay").hide();
+//        $(".reciever_name").html(callrcvr);
+//        $(".reciever_dp").attr("src", pix);
+//        //alert("")
+        page = "contacts";
+        getMi(page);
+//        $(".app_display").append($("#contacts_sect").html());
+//        $(".app_display").slideDown("slow");
+        //alert(name + " rejected ur call");
+        iosocket.emit("call_finished", mi);
+//        con.emit("call_finished", mi);
+//        $("#display_" + name).slideUp("slow");
+    });
+
+    iosocket.on("start_audio_call", function(name) {
+//        //alert("in call  " + name);
+//           $(".app_display").load("http://localhost/Qtalk/talk.php");
+//   window.location="http://192.168.1.4/Qtalk/talk.php";
+        page = "talk";
+        getMi(page);
+//        con.emit("call_finished", mi);
+//        $("#display_" + name).slideUp("slow");
+    });
+
+//audio_call_rejected
+};
+conThread();
+
+//============================== Click Events===============================================
+
+$(document).on('click', ".history_item", function() {
+//    loca = "chat";
+    var loc = $(this).attr("rel");
+    var loc_user = $(this).attr("rel_user");
+//    //alert(loc);
+//    //alert(loc_user);
+//    window.m.chatWith(loc);
+    window.localStorage.setItem("chat_with", loc);
+    window.localStorage.setItem("chat_with_username", loc_user);
+//    window.location = "chat.html";
+    $("body").empty();
+    $("body").load("chat.html");
+});
+
+$(document).on('touchstart', ".reciever_dp", function() {
+//    loca = "profile";
+
+    $("body").load("profile.html");
+});
+
+$(document).on("touchstart", ".back_btn_recent", function(e) {
+
+//    $("body").empty();
+//        ("hMenu.html");
+//    //alert(count("<body>"));
+    $("body").load("hMenu.html");
+//    location.reload();
+});
+$(document).on("touchstart", ".back_btn_chat", function(e) {
+
+    $("body").load("recent.html");
+});
+
+$(document).on('touchstart', ".my_profile_home", function() {
+//    loca = "my_profile";
+
+    $("body").load("my_profile.html");
+});
+
+
+
+$(document).on('touchstart', ".audio_call", function() {
+//    loca = "my_profile";
+    $("body").empty();
+    calltype="audio";
+ $("body").load("vid_out.html");
+    
+
+
+});
+
+$(document).on('touchstart', ".video_call", function() {
+//    loca = "my_profile";
+//    //alert("video");
+calltype="video";
+    $("body").empty();
+    $("body").load("vid_out.html");
+});
+
+      </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
