@@ -142,25 +142,9 @@
      >
       </div>-->
       <script>
-          $(document).ready(function() {
-           
-//             
-              //    19
-//    user_id = "james@gmail.com";
-//      sender_name="james";
-//   22
-        user_id = "checkmate@email.com";
- sender_name="ola";
-        //    user_id = "19";
-    sender = user_id ;//"tosyngy";//;
-//    sender_name = $("#user").val();
-    recid = sender;
-//      personal = "test@name.com";
-      current_chatting="james@gmail.com";
-
-});
+  
           ////alert("h");
-          var current_chatting = "";
+//          var current_chatting = "";
 var iosocket, recid, recieving = "false";
 var user_details;
 var doctorlist, caller;
@@ -169,6 +153,25 @@ var data, loca;
 var personal;
 var calltype;
 var user_id;
+        $(document).ready(function() {
+           
+//             
+              //    19
+//    user_id = "james@gmail.com";
+//      sender_name="james";
+//      console.log("current chatting"+user_id)
+//   22
+        user_id = "wilson@gmail.com";
+ sender_name="ola";
+        //    user_id = "19";
+    sender = user_id ;//"tosyngy";//;
+//    sender_name = $("#user").val();
+    recid = sender;
+//      personal = "test@name.com";
+      current_chatting="admin2@gmail.com";
+//      current_chatting="admin1@gmail.com";
+
+});
 var recordState = function(state) {
     window.localStorage.setItem("loca", state);
 };
@@ -193,20 +196,24 @@ var conThread = function() {
 ////        loca = getState();
 //    }
 
-    iosocket = io.connect('http://localhost:3001');
+    iosocket = io.connect('http://localhost:8080');
 //    personal = "checkmate@email.com";
-    personal = "chidima@gmail.com";
+//    personal = "james@gmail.com";
+//    personal = "wilson@gmail.com";
 //    19
 //    user_id = "APA91bFRtR8iGPPhWw_BSr3YuZok16K2zaw27Mrzc6wuAlOYIlNJchcujeBVnN2G0wVIaoL30VXKhBpfjWZFpx10XfJQFUj6HJ9G2lkOLkmQr5aiLPtFDRkQIisDeuRMeOQrD5_pE1ncCCc9y1JhTXXwDobAg327Mg";
 //   22
-        user_id = "APA91bGFPuMNVx-4CW0K1R3Qhr8243z4L0AchMvA1wnSpfHavzyTo5yhP270j6pVNbTuOWcC4sSsamtSaaMZ8bfaG5HYzigOa_dEo6SkJVybel010elI3vgHV8_mKFl9xfeCLbsSpY0ty83jX2LYEcHHBrJpD7kWEw";
+//        user_id = "APA91bGFPuMNVx-4CW0K1R3Qhr8243z4L0AchMvA1wnSpfHavzyTo5yhP270j6pVNbTuOWcC4sSsamtSaaMZ8bfaG5HYzigOa_dEo6SkJVybel010elI3vgHV8_mKFl9xfeCLbsSpY0ty83jX2LYEcHHBrJpD7kWEw";
 //    user_id = "19";
 //    
 //    em=personal;
 //    //alert(personal);
     iosocket.on("connect", function(){
 //     iosocket.emit("register", recid);
+ 
      iosocket.emit("register", user_id);
+      console.log("current user"+user_id);
+  console.log("current chatting"+current_chatting);
             window.localStorage.setItem("my_id", user_id);
     });
   iosocket.on("note", function(data) {
@@ -254,194 +261,19 @@ console.log("here")
                         status: 0,
                         time: ""
                     };
-                    iosocket.emit("pm", out);
+                    iosocket.emit("msgadmin", out);
                     $('#msg_input_pm').text('');
                 }
             });
            
-
-
-
-
-
-
-
-
-
-
-    iosocket.on("callFailed", function(data) {
-        //alert("Call Failed!");
-        $("body").load("chat.html");
-    });
-
-    iosocket.on("videoRequestFailed", function(data) {
-        //alert("Call Failed!");
-//        window.location = "chat.html";
-        $("body").load("chat.html");
-    });
-    iosocket.on("audioRequestFailed", function(data) {
-        //alert("Call Failed!");
-//        window.location = "chat.html";
-        $("body").load("chat.html");
-    });
-
-
-
-    iosocket.on("call_ended_by_caller", function(name) {
-        //alert("call ended");
-//        iosocket.emit("call_finished", mi);
-        $("body").load("recent.html");
-    });
-
-
-
-    iosocket.on("videoRequestMobile", function(data) {
-        window.localStorage.setItem("in_video_id", data.from);
-        window.localStorage.setItem("in_video_un", data.user1un);
-//        window.location = "vid_in.html";
-        $("body").load("vid_in.html");
-    });
-    
-    iosocket.on("audioRequestMobile", function(data) {
-        //alert("incomming audio");
-        window.localStorage.setItem("in_audio_id", data.from);
-        window.localStorage.setItem("in_audio_un", data.user1un);
-//        window.location = "vid_in.html";
-        $("body").load("audio_in.html");
-    });
-
-    iosocket.on("vid_accepted", function(data_key) {
-//        //alert("data_key");
-        //alert(data_key);
-        window.localStorage.setItem("call_key", data_key);
-        $("body").load("talk.html");
-//        window.location = "";
-// $("body").load("http://localhost/mcr/vid?key=" + data_key);
-    });
-    
-    iosocket.on("audio_accepted", function(data_key) {
-//        //alert("data_key");
-        //alert(data_key);
-        window.localStorage.setItem("call_key", data_key);
-        $("body").load("talk_audio.html");
-//        window.location = "";
-// $("body").load("http://localhost/mcr/vid?key=" + data_key);
-    });
-
-    iosocket.on("video_rej", function(data_key) {
-        //alert("video rejected");
-
-//        window.location = "recent.html";
-        $("body").load("recent.html");
-
-    });
-
-    iosocket.on("vid_rejected", function(data) {
-
-//        window.location = "recent.html";
-        $("body").load("recent.html");
-    });
-    iosocket.on("audio_rejected", function(data) {
-
-//        window.location = "recent.html";
-        $("body").load("recent.html");
-    });
+  iosocket.on('status_sent', function(msg) {
+               $('.chats').append($(" <div class='chat'><div class='chat-body'><div class='chat-content' data-toggle='tooltip' title='8:30 am'><p>"+msg.message+"</p></div></div></div>"));
+            var wtf = $('#my_chat_body');
+            var height = wtf[0].scrollHeight;
+            wtf.scrollTop(height);
+            });
 
   
-    iosocket.on("mobile_con_success", function(data) {
-        if (loca === "recent") {
-//            $.post("http://localhost/medslat/mobile/history", {mobile: true, id: recid},
-//            function(dee) {
-//                data = dee;
-//                var lupus = JSON.parse(data);
-//                $.each(lupus, function(key, data) {
-//                    console.log(key);
-//                    console.log(data);
-//                    $.post("http://localhost/medslat/mobile/uname2id", {username: key},
-//                    function(dee) {
-////                    
-////                <span class="photo">
-////                    <img class="img-circle img-rounded rec_dp" src="images/mem2.jpg" alt="avatar"></img>
-////                </span>
-////
-////                <div style="margin-left: 50px;width: 90%;">
-////                    <div class="subject">
-////                        <span class="from">jay</span>
-////                        <span class="time">40 minutes ago</span>
-////                    </div>
-////                    <div class="message">
-////                        xuppppppppppp htty sdfr rtt rt rtyrty ytrtyr
-////                    </div>
-////                </div>
-////            </jj>
-////        </div>
-//                        toadd = "<div class='history_item' rel='" + dee + "' rel_user='" + key + "'><jj href='#'><span class='photo'><img class='img-circle img-rounded rec_dp' alt='avatar' src='assets/img/ui-zac.jpg'></span>\n\
-//<div style='margin-left: 50px;width: 90%;'><div class='subject'>\n\
-//<span class='from'>" + key + "</span>\n\
-//<span class='time'>" + data[0]["time"] + "</span>\n\
-//</span>\n\
-//<div class='message'> " + data[0]["message"] +
-//                                "   </div></jj> </div>   ";
-//                        //alert(toadd);
-//                        $('#home').append($(toadd));
-//                    });
-//                });
-//            });
-        }
-
-        else if (loca === "chat") {
-//            var doc = window.localStorage.getItem("chat_with");
-////            //alert(doc);
-//
-//            var myself = user_details.tu;
-//
-////            var doc = window.m.getDoc();
-////            var myself = window.m.testB();
-//            $.post("http://localhost/medslat/mobile/uname2id", {username: myself},
-//            function(data_myself)
-//            {
-//                //                    //alert(data_myself);
-//                var recid_myself = data_myself;
-//                //            //alert("history  ");
-//                $.post("http://localhost/medslat/mobile/xhrloadPrevMsg", {user1id: data_myself, user2id: doc}, function(resp) {
-//                    history_each = resp;
-//                    console.log(history_each);
-//
-//                    $.post("http://localhost/medslat/mobile/id2uname", {username: doc},
-//                    function(username) {
-//
-//                        //                                $("#userhead").attr("ref",doc);
-//                        $("#userhead").text(username);
-//                    });
-//                    var lupus = JSON.parse(history_each);
-//                    $.each(lupus, function(doc, data) {
-//                        console.log(data);
-//
-//                        var me = parseInt(recid_myself);
-//                        var you = parseInt(doc);
-//
-//                        var user1 = parseInt(data.user1id);
-//                        var user2 = parseInt(data.user2id);
-//
-//                        if (me == user1 || you == user2) {
-//
-//                            $('.chat_board').append($("<div class='bubble_row'><div class=' outgoing_bubble  callout'>" + data.message + "</div> </div>"));
-//
-//                        }
-//                        else {
-//                            $('.chat_board').append($("<div class='bubble_row'><div class=' incomming_bubble  callout'>" + data.message + "</div></div>"));
-//                        }
-//
-////                        var wtf = $('.chat_board');
-////                        var height = wtf[0].scrollHeight;
-////                        wtf.scrollTop(height);
-////
-//                    });
-//                });
-//            });
-
-        }
-    });
 
     iosocket.on('text', function(data) {
         $('#chat').prepend($('<p>').text(data.username + ': ' + data.text));
@@ -453,9 +285,9 @@ console.log("here")
         console.log(message)
         console.log(message.user1id)
         var test = window.localStorage.getItem("chat_with");
-//        alert(test)
+        alert(test+"current chatting with")
         if (test == message.user1id) {
-            $('.chats').append($(" <div class='chat'><div class='chat-body'><div class='chat-content' data-toggle='tooltip' title='8:30 am'><p>"+message+"</p></div></div></div>"));
+            $('.chats').append($(" <div class='chat'><div class='chat-body'><div class='chat-content' data-toggle='tooltip' title='8:30 am'><p>"+message.message+"</p></div></div></div>"));
             var wtf = $('#my_chat_body');
             var height = wtf[0].scrollHeight;
             wtf.scrollTop(height);
