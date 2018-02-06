@@ -19,7 +19,8 @@ var newUserNotify = [];
 var rec_id, x, y;
 var all_admin_id = [];
 var port = process.env.PORT || 8080;
- var APIURL="http://localhost/atikuApi/";
+// var APIURL="http://localhost/atikuApi/";
+ var APIURL="http://api.atikuvotersapp.org/";
 //var pool = mysql.createPool({
 //    connectionLimit: 100,
 //    host: 'localhost',
