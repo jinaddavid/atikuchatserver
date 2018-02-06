@@ -215,10 +215,12 @@ io.on('connection', function (socket) {
                                             if (getMap(data2) == -1) {
                                                 console.log("u self no dey  online");
                                             } else {
-                                                console.log("seningg notificaTIONS");
+                                                console.log("seningg notificaTIONS__reall not online");
                                                 getMap(data2).emit("status_sent", info);
                                             }
-                                        } else {
+                                        } 
+                                        
+                                        else {
 //                                    console.log("my recever " + generate_id(data2, getUseToken(rec_id)));
 //                                    info['user1id'] = generate_id(data2, getUseToken(rec_id));
                                             console.log("my recever " + getUseToken(rec_id));
@@ -295,6 +297,7 @@ io.on('connection', function (socket) {
                     if (err) {
                         console.log("ERROR : ", err);
                     } else {
+                        
                         console.log('iias;' + rec_id);
                         getUID("", info.user1id, function (err, data2) { /// get the user id from db using user login token
                             if (err) {
@@ -326,13 +329,27 @@ io.on('connection', function (socket) {
 
                                         if (getMap(rec_id) == -1) {
                                             console.log("user not online" + rec_id);
+                                             for (i = 0; i < fLen; i++) {
+                                                  if (getMap(all_admin_id[i]) == -1) {
+                                                console.log("Admin not online");
+
+                                            }
+                                                else{
+                                                       console.log(all_admin_id[i] + "this is it")
+                                                 getMap(all_admin_id[i]).emit("message", info);
+                                                }
+                                                
+                                             
+                                            }
                                             if (getMap(data2) == -1) {
                                                 console.log("u self no dey  online");
                                             } else {
                                                 console.log("seningg notificaTIONS");
                                                 getMap(data2).emit("status_sent", info);
                                             }
-                                        } else {
+                                        }
+                                        
+                                        else {
 //                                    console.log("my recever " + generate_id(data2, getUseToken(rec_id)));
 //                                    info['user1id'] = generate_id(data2, getUseToken(rec_id));
                                             console.log("my recever " + getUseToken(rec_id));
@@ -354,7 +371,7 @@ io.on('connection', function (socket) {
                                             
 
                                             if (getMap(rec_id) == -1) {
-                                                console.log("user not online");
+                                                console.log("the Actual admin not online");
 
                                             } else {
                                                 if (getMap(data2) == -1) {
@@ -1036,7 +1053,11 @@ function getToken(username, id, callback)
             console.log(response.data.message)
                     if (response.data.status==="true"){
                             console.log("---->" + response.data.message);
- var d = new Date();
+//                     callback(response.data.message);    
+callback(null, response.data.message);
+            }
+                
+                var d = new Date();
                 var curr_date = d.getDate();
                 if (curr_date < 10) {
                     curr_date = '0' + curr_date;
@@ -1050,10 +1071,10 @@ function getToken(username, id, callback)
                 var curr_year = d.getFullYear();
                 if (curr_year < 10) {
                     curr_year = '0' + curr_year;
+                    }
+                  
 //                    }
-                    callback(response.data.message); 
-                    }
-                    }
+//                    }
  
         })
         .catch(function (error) {
