@@ -157,18 +157,18 @@ var user_id;
            
 //             
               //    19
-//    user_id = "james@gmail.com";
-//      sender_name="james";
+    user_id = "james@gmail.com";
+      sender_name="james";
 //      console.log("current chatting"+user_id)
 //   22
-        user_id = "wilson@gmail.com";
- sender_name="ola";
+//        user_id = "wilson@gmail.com";
+// sender_name="ola";
         //    user_id = "19";
     sender = user_id ;//"tosyngy";//;
 //    sender_name = $("#user").val();
     recid = sender;
 //      personal = "test@name.com";
-      current_chatting="admin2@gmail.com";
+      current_chatting="admin1@gmail.com";
 //      current_chatting="admin1@gmail.com";
 
 });
@@ -197,6 +197,7 @@ var conThread = function() {
 //    }
 
     iosocket = io.connect('http://localhost:8080');
+//    iosocket = io.connect('https://polar-forest-71145.herokuapp.com/');
 //    personal = "checkmate@email.com";
 //    personal = "james@gmail.com";
 //    personal = "wilson@gmail.com";
@@ -331,52 +332,9 @@ console.log("here")
         $("#display_" + name).slideUp("slow");
     });
 
-    iosocket.on("call_ended", function(name) {
-//         //alert("U ended call to "+name);
-        iosocket.emit("call_finished", mi);
-//        $("#display_" + name).slideUp("slow");
-    });
+  
 
-
-    iosocket.on("missed_call", function(name) {
-//         //alert("missed call from "+name);
-        page = "contacts";
-        getMi(page);
-        iosocket.emit("call_finished", mi);
-//        $("#display_" + name).slideUp("slow");
-    });
-
-    iosocket.on("audio_call_accepted", function(name) {
-//        //alert("in call  " + name);
-
-//        con.emit("call_finished", mi);
-//        $("#display_" + name).slideUp("slow");
-    });
-
-    iosocket.on("audio_call_rejected", function(name) {
-//        $("#outgoing_overlay").hide();
-//        $(".reciever_name").html(callrcvr);
-//        $(".reciever_dp").attr("src", pix);
-//        //alert("")
-        page = "contacts";
-        getMi(page);
-//        $(".app_display").append($("#contacts_sect").html());
-//        $(".app_display").slideDown("slow");
-        //alert(name + " rejected ur call");
-        iosocket.emit("call_finished", mi);
-//        con.emit("call_finished", mi);
-//        $("#display_" + name).slideUp("slow");
-    });
-
-    iosocket.on("start_audio_call", function(name) {
-//        //alert("in call  " + name);
-//           $(".app_display").load("http://localhost/Qtalk/talk.php");
-//   window.location="http://192.168.1.4/Qtalk/talk.php";
-        page = "talk";
-        getMi(page);
-//        con.emit("call_finished", mi);
-//        $("#display_" + name).slideUp("slow");
-    });
+ 
 
 //audio_call_rejected
 };

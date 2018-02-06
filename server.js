@@ -339,8 +339,16 @@ io.on('connection', function (socket) {
 //                                    info['user1id'] = getUseToken(rec_id);
                                             console.log(info + "popoopopopopoopopopo");
                                             for (i = 0; i < fLen; i++) {
-                                                console.log(all_admin_id[i] + "this is it")
+                                                  if (getMap(all_admin_id[i]) == -1) {
+                                                console.log("Admin not online");
+
+                                            }
+                                                else{
+                                                       console.log(all_admin_id[i] + "this is it")
                                                  getMap(all_admin_id[i]).emit("message", info);
+                                                }
+                                                
+                                             
                                             }
 
                                             
@@ -1022,25 +1030,13 @@ function getToken(username, id, callback)
     } else {
         console.log("from database");
         console.log("get token " + id);
-        pool.getConnection(function (err, connection) {
-            if (err) {
-                connection.release();
-                callback(false);
-                return;
-            }
-            connection.query('SELECT email FROM users WHERE id = ?', [id], function (err, result)
-            {
-                if (err)
-                    callback(err, null);
-                else
-                    console.log(result);
-                if (result.length !== 0) {
-                    console.log("---->" + result[0].login_token);
-                    callback(null, result[0].login_token);
-                }
-
-//                
-                var d = new Date();
+        
+          axios.get(APIURL+"getemail/"+id)
+        .then(function (response) {
+            console.log(response.data.message)
+                    if (response.data.status==="true"){
+                            console.log("---->" + response.data.message);
+ var d = new Date();
                 var curr_date = d.getDate();
                 if (curr_date < 10) {
                     curr_date = '0' + curr_date;
@@ -1054,9 +1050,57 @@ function getToken(username, id, callback)
                 var curr_year = d.getFullYear();
                 if (curr_year < 10) {
                     curr_year = '0' + curr_year;
-                }
-            });
+//                    }
+                    callback(response.data.message); 
+                    }
+                    }
+ 
+        })
+        .catch(function (error) {
+          console.log(error)
         });
+        
+        
+        
+        
+        
+        
+        
+//        pool.getConnection(function (err, connection) {
+//            if (err) {
+//                connection.release();
+//                callback(false);
+//                return;
+//            }
+//            connection.query('SELECT email FROM users WHERE id = ?', [id], function (err, result)
+//            {
+//                if (err)
+//                    callback(err, null);
+//                else
+//                    console.log(result);
+//                if (result.length !== 0) {
+//                    console.log("---->" + result[0].login_token);
+//                    callback(null, result[0].login_token);
+//                }
+//
+////                
+//                var d = new Date();
+//                var curr_date = d.getDate();
+//                if (curr_date < 10) {
+//                    curr_date = '0' + curr_date;
+//                }
+//
+//                var curr_month = d.getMonth() + 1;
+//                if (curr_month < 10) {
+//                    curr_month = '0' + curr_month;
+//                }
+//
+//                var curr_year = d.getFullYear();
+//                if (curr_year < 10) {
+//                    curr_year = '0' + curr_year;
+//                }
+//            });
+//        });
     }
 
 
