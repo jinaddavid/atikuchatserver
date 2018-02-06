@@ -710,7 +710,7 @@ function getUIDandtype(username, roomCount, callback) {
 //    });
 //    
 //    
-      axios.get("http://localhost/atikuApi/getUIDandtype/"+roomCount)
+      axios.get(APIURL+"getUIDandtype/"+roomCount)
         .then(function (response) {
             console.log(response.data.message)
                     if (response.data.status==="true"){
