@@ -1,5 +1,6 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+var qs = require('qs');
 var axios=require('axios');
 var app = require("express")();
 var mysql = require("mysql");
@@ -18,16 +19,16 @@ var newUserNotify = [];
 var rec_id, x, y;
 var all_admin_id = [];
 var port = process.env.PORT || 8080;
- 
-var pool = mysql.createPool({
-    connectionLimit: 100,
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    port: 3306,
-    database: 'atikuapp',
-    debug: false
-});
+ var APIURL="http://localhost/atikuApi/";
+//var pool = mysql.createPool({
+//    connectionLimit: 100,
+//    host: 'localhost',
+//    user: 'root',
+//    password: '',
+//    port: 3306,
+//    database: 'atikuapp',
+//    debug: false
+//});
 
 
 
@@ -147,51 +148,7 @@ io.on('connection', function (socket) {
         });
     });
 
-
-
-    //    vid_accepted
-//    handle is typing here
-    socket.on('ty', function (info) {
-        console.log("tying.....");
-        console.log("tying.....");
-        console.log("tying.....");
-        console.log(info);
-        var rec_id = convert2id(info.user2id);
-        var sen_id = 0;
-
-        console.log("reciepeint " + rec_id);
-        if (getMap(rec_id) == -1) {
-            console.log("user not online");
-            if (getMap(info.user1id) == -1) {
-                console.log("u self no dey  online");
-            }
-        } else {
-            getToken("", rec_id, function (err, data) {
-                if (err) {
-                    console.log("ERROR : ", err);
-                } else {
-
-                    console.log('iias;' + rec_id);
-                    getUID("", info.user1id, function (err, data2) {
-                        if (err) {
-                            console.log("ERROR : ", err);
-                        } else {
-                            console.log("receiver token: " + data + "sender id " + data2);
-                            console.log("recipient id ->" + generate_id(data2, data));
-                            info['user1id'] = generate_id(data2, data);
-                            console.log(info);
-                            getMap(rec_id).emit("ty", info);
-                        }
-                    });
-
-//            if (getMap(info.user1id) == -1) {
-//                console.log("u self no dey  online");
-//            }
-
-                }
-            });
-        }
-    });
+ 
 
     socket.on('pm', function (info) {
         console.log("david here")
@@ -540,13 +497,13 @@ io.on('connection', function (socket) {
 var add_status = function (status, callback) {
 //    var user1id,user2id;
     console.log(status);
-    pool.getConnection(function (err, connection) {
-        console.log(err + "-jjjj");
-        if (err) {
-            connection.release();
-            callback(false);
-            return;
-        }
+//    pool.getConnection(function (err, connection) {
+//        console.log(err + "-jjjj");
+//        if (err) {
+//            connection.release();
+//            callback(false);
+//            return;
+//        }
 
         message = status.message;
         user1id = status.user1ida;
@@ -563,51 +520,70 @@ var add_status = function (status, callback) {
         console.log(" getting time == " + secon);
         console.log(message + user1id + user2id + status);
         var getting_time = secon;
-        var query = "INSERT INTO `message_tbl` (`message`,`user1id`,`user2id`,`status`,`msg_date`,`msg_time`) VALUES ?";
-        var data = [
-            [message, user1id, user2id, status1, goh, secon]
-        ];
-//        console.log("what to sfe " + data);
-        connection.query(query, [data], function (err, rows) {
-            connection.release();
-            if (!err) {
-                console.log("AKIN--->" + rows.id);
-                var msgString = JSON.stringify(status);
-//                request.post(
-//                        'http://localhost/medslat/mobile/puShMessage/',
-//                        {form: status},
-//                function(error, response, body) {
-//                    if (!error && response.statusCode === 200) {
-//                        console.log(body);
+        
+          axios.post(APIURL+'savechat',qs.stringify( {
+    message: message,
+    user1id: user1id,
+    user2id: user2id,
+    status1: status1,
+    goh: goh, 
+    secon: secon
+  }))
+  .then(function (response) {
+   console.log(response+"res david")
+     callback(secon);
+  })
+  .catch(function (error) {
+   console.log(error)
+  });
+       
+        
+        
+//        var query = "INSERT INTO `message_tbl` (`message`,`user1id`,`user2id`,`status`,`msg_date`,`msg_time`) VALUES ?";
+//        var data = [
+//            [message, user1id, user2id, status1, goh, secon]
+//        ];
+////        console.log("what to sfe " + data);
+//        connection.query(query, [data], function (err, rows) {
+//            connection.release();
+//            if (!err) {
+//                console.log("AKIN--->" + rows.id);
+//                var msgString = JSON.stringify(status);
+////                request.post(
+////                        'http://localhost/medslat/mobile/puShMessage/',
+////                        {form: status},
+////                function(error, response, body) {
+////                    if (!error && response.statusCode === 200) {
+////                        console.log(body);
+////
+////                    }
+////                }
+////                );
+//                callback(secon);
+//            }
 //
-//                    }
-//                }
-//                );
-                callback(secon);
-            }
-
-        });
-        connection.on('error', function (err) {
-            callback(false);
-            return;
-        });
-    });
+//        });
+//        connection.on('error', function (err) {
+//            callback(false);
+//            return;
+//        });
+//    });
 };
 //inserts a message to the database for admin
 var add_status2 = function (status, callback) {
 //    var user1id,user2id;
     console.log(status);
-    pool.getConnection(function (err, connection) {
-        console.log(err + "-jjjj");
-        if (err) {
-            connection.release();
-            callback(false);
-            return;
-        }
+//    pool.getConnection(function (err, connection) {
+//        console.log(err + "-jjjj");
+//        if (err) {
+//            connection.release();
+//            callback(false);
+//            return;
+//        }
 
         message = status.message;
 //        user1id = status.user1ida;
-        user1id = status.admin_id;
+        user1id = status.admin_id; 
         user2id = status.user2ida;
 //        user2id = "0";
         status1 = status.status;
@@ -620,66 +596,66 @@ var add_status2 = function (status, callback) {
         console.log(" getting time == " + secon);
         console.log(message + user1id + user2id + status);
         var getting_time = secon;
-        var query = "INSERT INTO `message_tbl` (`message`,`user1id`,`user2id`,`status`,`msg_date`,`msg_time`) VALUES ?";
-        var data = [
-            [message, user1id, user2id, status1, goh, secon]
-        ];
-//        console.log("what to sfe " + data);
-        connection.query(query, [data], function (err, rows) {
-            connection.release();
-            if (!err) {
-                console.log("AKIN--->" + rows.id);
-                var msgString = JSON.stringify(status);
-//                request.post(
-//                        'http://localhost/medslat/mobile/puShMessage/',
-//                        {form: status},
-//                function(error, response, body) {
-//                    if (!error && response.statusCode === 200) {
-//                        console.log(body);
-//
-//                    }
-//                }
-//                );
-                callback(secon);
-            }
+//        var params = new URLSearchParams();
+//params.append('param1', 'value1');
+//params.append('param2', 'value2');
 
-        });
-        connection.on('error', function (err) {
-            callback(false);
-            return;
-        });
-    });
+//axios.post('/foo', qs.stringify({ 'bar': 123 });
+        axios.post(APIURL+'savechat',qs.stringify( {
+    message: message,
+    user1id: user1id,
+    user2id: user2id,
+    status1: status1,
+    goh: goh, 
+    secon: secon
+  }))
+  .then(function (response) {
+   console.log(response+"res david")
+     callback(secon);
+  })
+  .catch(function (error) {
+   console.log(error)
+  });
+        
+        
+        
+        
+        
+        
+        
+        
+//        var query = "INSERT INTO `message_tbl` (`message`,`user1id`,`user2id`,`status`,`msg_date`,`msg_time`) VALUES ?";
+//        var data = [
+//            [message, user1id, user2id, status1, goh, secon]
+//        ];
+////        console.log("what to sfe " + data);
+//        connection.query(query, [data], function (err, rows) {
+//            connection.release();
+//            if (!err) {
+//                console.log("AKIN--->" + rows.id);
+//                var msgString = JSON.stringify(status);
+////                request.post(
+////                        'http://localhost/medslat/mobile/puShMessage/',
+////                        {form: status},
+////                function(error, response, body) {
+////                    if (!error && response.statusCode === 200) {
+////                        console.log(body);
+////
+////                    }
+////                }
+////                );
+              
+//            }
+
+//        });
+//        connection.on('error', function (err) {
+//            callback(false);
+//            return;
+//        });
+//    });
 };
 
 
-//update message status as read
-var msg_read = function (data, callback) {
-    var rec_id = convert2id(data.user2id);
-    var sen_id = 0;
-    getUID("", data.user1id, function (err, data) {
-        if (err) {
-            console.log("ERROR : ", err);
-        } else {
-            pool.getConnection(function (err, connection) {
-                if (err) {
-                    connection.release();
-                    callback(false);
-                    return;
-                }
-                var id1 = data;
-                var id2 = rec_id;
-                connection.query("UPDATE `message_tbl` SET `status`=1 WHERE  (user1id='" + id1 + "' AND user2id='" + id2 + "') OR (user2id='" + id1 + "' AND user1id='" + id2 + "')"), function (err, rows) {
-                    connection.release();
-                };
-                connection.on('error', function (err) {
-                    callback(false);
-                    return;
-                });
-            });
-        }
-    });
-
-};
 
 function getUID(username, roomCount, callback) {
 //    getUseTokenUID 
@@ -687,28 +663,22 @@ function getUID(username, roomCount, callback) {
         console.log("from inside get yuid");
         callback(null, getUseTokenUID(roomCount));
     } else {
-//        console.log("get uid " + roomCount);
-        pool.getConnection(function (err, connection) {
-            if (err) {
-                connection.release();
-                callback(false);
-                return;
-            }
-//            connection.query('SELECT id FROM users WHERE login_token = ?', [roomCount], function(err, result)
-            connection.query('SELECT id FROM users WHERE email = ?', [roomCount], function (err, result)
-            {
-                if (err)
-                    callback(err, null);
-                else
-                    console.log(result);
-                if (result.length !== 0) {
-                    console.log("---->" + result[0].id);
-                    callback(null, result[0].id);
-                }
-
-//                
-
-            });
+                axios.get(APIURL+"getUIDandtype/"+roomCount)
+        .then(function (response) {
+            console.log(response.data.message)
+                    if (response.data.status==="true"){
+                            console.log("---->" + response.data.message[0].id);
+                    var id = response.data.message[0].id;
+                    var type = response.data.message[0].usertype;
+                    console.log(type)
+                  
+                    callback(null, response.data.message[0].id); 
+                    }
+//            pokemonName.innerHTML = response.data.forms[0].name;
+//            pokemonImage.src = response.data.sprites.front_default;
+        })
+        .catch(function (error) {
+          console.log(error)
         });
     }
 
@@ -795,55 +765,7 @@ function getUIDandtype(username, roomCount, callback) {
 
 }
 
-function getToken(username, id, callback)
-{
 
-    if (getUseToken(id) !== -1) {
-        console.log("from inside");
-        callback(null, getUseToken(id));
-    } else {
-        console.log("from database");
-        console.log("get token " + id);
-        pool.getConnection(function (err, connection) {
-            if (err) {
-                connection.release();
-                callback(false);
-                return;
-            }
-            connection.query('SELECT email FROM users WHERE id = ?', [id], function (err, result)
-            {
-                if (err)
-                    callback(err, null);
-                else
-                    console.log(result);
-                if (result.length !== 0) {
-                    console.log("---->" + result[0].login_token);
-                    callback(null, result[0].login_token);
-                }
-
-//                
-                var d = new Date();
-                var curr_date = d.getDate();
-                if (curr_date < 10) {
-                    curr_date = '0' + curr_date;
-                }
-
-                var curr_month = d.getMonth() + 1;
-                if (curr_month < 10) {
-                    curr_month = '0' + curr_month;
-                }
-
-                var curr_year = d.getFullYear();
-                if (curr_year < 10) {
-                    curr_year = '0' + curr_year;
-                }
-            });
-        });
-    }
-
-
-}
-//call Fn for db query with callback
 
 //update user last seen 
 var last_seen = function (data, callback) {
@@ -894,127 +816,94 @@ var last_seen = function (data, callback) {
         curr_year = '0' + curr_year;
     }
     var current_date = curr_date + "-" + curr_month + "-" + curr_year;
+           axios.post(APIURL+'updatelastseen',qs.stringify( {
+    current_date: current_date,
+    current_time: current_time,
+    data: data
+  }))
+  .then(function (response) {
+   console.log(response+"kile kile")
+//     callback(secon);
+  })
+  .catch(function (error) {
+   console.log(error)
+                return ;
+  });
+     
 
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            console.log("error")
-            connection.release();
-            callback(false);
-            return;
-        }
-//console.log("UPDATE `message_tbl` SET `status`=3 WHERE  (user1id='" + id1 + "' AND user2id='" + id2 + "') OR (user2id='" + id1 + "' AND user1id='" + id2 + "')");
-        connection.query("UPDATE `users` SET `last_date`='" + current_date + "',`last_time`='" + current_time + "' WHERE  id='" + data + "'"), function (err, rows) {
-//           (user1id=:user1id AND user2id=:user2id) OR (user2id=:user1id AND user1id=:user2id)
-//'" + id1 + "'
-            connection.release();
-
-        };
-        connection.on('error', function (err) {
-            callback(false);
-            return;
-        });
-    });
+//    pool.getConnection(function (err, connection) {
+//        if (err) {
+//            console.log("error")
+//            connection.release();
+//            callback(false);
+//            return;
+//        }
+////console.log("UPDATE `message_tbl` SET `status`=3 WHERE  (user1id='" + id1 + "' AND user2id='" + id2 + "') OR (user2id='" + id1 + "' AND user1id='" + id2 + "')");
+//        connection.query("UPDATE `users` SET `last_date`='" + current_date + "',`last_time`='" + current_time + "' WHERE  id='" + data + "'"), function (err, rows) {
+////           (user1id=:user1id AND user2id=:user2id) OR (user2id=:user1id AND user1id=:user2id)
+////'" + id1 + "'
+//            connection.release();
+//
+//        };
+//        connection.on('error', function (err) {
+//            callback(false);
+//            return;
+//        });
+//    });
 };
 var con2id = function (email, callback) {
     console.log("here");
     console.log("here" + email);
     console.log("here");
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            connection.release();
-            callback(false);
-            return;
-        }
-        connection.query('SELECT id FROM users WHERE email = ?', [email], function (err, result)
-        {
-            if (err) {
-                callback(err, null);
-            } else {
-                console.log(result + "result dav");
-                if (result.length !== 0) {
-                    console.log("---->" + result[0].id);
-
-                    callback(result[0].id);
-//                return result[0].id;
-                }
-
-            }
-
+     axios.get(APIURL+"getid/"+email)
+        .then(function (response) {
+            console.log(response.data.message)
+                    if (response.data.status==="true"){
+                            console.log("---->" + response.data.message);
+//                    var id = response.data.message[0].id;
+//                    var type = response.data.message[0].usertype;
+//                    console.log(type)
+//                    if (type === "admin") {
+//                        alladmin[id] = username;
+//                        all_admin_id[all_admin_id.length] = id;
+//                    }
+                    callback(response.data.message); 
+                    }
+ 
+        })
+        .catch(function (error) {
+          console.log(error)
         });
-    });
+//    pool.getConnection(function (err, connection) {
+//        if (err) {
+//            connection.release();
+//            callback(false);
+//            return;
+//        }
+//        connection.query('SELECT id FROM users WHERE email = ?', [email], function (err, result)
+//        {
+//            if (err) {
+//                callback(err, null);
+//            } else {
+//                console.log(result + "result dav");
+//                if (result.length !== 0) {
+//                    console.log("---->" + result[0].id);
+//
+//                    callback(result[0].id);
+////                return result[0].id;
+//                }
+//
+//            }
+//
+//        });
+//    });
 
 
 };
-function checkadminid(email, callback) {
-    console.log("herew" + email);
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            connection.release();
-            callback(false);
-            return;
-        }
-        connection.query('SELECT * FROM users WHERE id = ?', [email], function (err, result)
-        {
-            if (err) {
-                callback(err, null);
-            } else {
-                console.log(result + "result dav");
-                if (result.length !== 0) {
-                    var id = result[0].id;
-                    var type = result[0].usertype;
-                    if (type === "admin") {
-                        callback(0);
-                    } else {
-                        callback(result[0].id);
-                    }
-                    console.log("---->" + result[0].id);
-
-//                return result[0].id;
-                }
-
-            }
-
-        });
-    });
 
 
-}
-;
 var dav;
-function changeid(email) {
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            connection.release();
-            callback(false);
-            return;
-        }
-        connection.query('SELECT * FROM users WHERE id = ?', [email], function (err, result)
-        {
-            if (err) {
-                callback(err, null);
-            } else {
-                console.log(result + "result dav");
-                if (result.length !== 0) {
-                    var id = result[0].id;
-                    var type = result[0].usertype;
-                    if (type === "admin") {
-//                     callback(0);
-                        dav = result[0].id;
-                    } else {
-                        dav = result[0].id;
-//                     callback(result[0].id);
-                    }
-                    console.log("---->" + result[0].id);
 
-//                return result[0].id;
-                }
-
-            }
-
-        });
-    });
-
-}
 // to check of a user is in the userlist (returns a value)
 function getMap(k) {
 //    console.log(allusers[k]);
@@ -1049,32 +938,7 @@ function getUseTokenUID(k) {
 
 }
 
-function convert2id(email) {
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            connection.release();
-            callback(false);
-            return;
-        }
-        connection.query('SELECT id FROM users WHERE email = ?', [email], function (err, result)
-        {
-            if (err) {
-                callback(err, null);
-            } else {
-                console.log(result + "result dav");
-                if (result.length !== 0) {
-                    console.log("---->" + result[0].id);
-//                    callback(null, result[0].id);
-                    return result[0].id;
-                }
 
-            }
-
-        });
-    });
-
-
-}
 function picksub(str, start, end) {
     var tokenarray = str.split('');
     var uid = "";
@@ -1144,6 +1008,201 @@ function putinplace(str, insertstr, pos) {
     console.log("positoion :" + pos);
     return str.substr(0, pos) + insertstr + str.substr(pos);
 }
+
+
+
+
+function getToken(username, id, callback)
+{
+
+    if (getUseToken(id) !== -1) {
+        console.log("from inside");
+        callback(null, getUseToken(id));
+    } else {
+        console.log("from database");
+        console.log("get token " + id);
+        pool.getConnection(function (err, connection) {
+            if (err) {
+                connection.release();
+                callback(false);
+                return;
+            }
+            connection.query('SELECT email FROM users WHERE id = ?', [id], function (err, result)
+            {
+                if (err)
+                    callback(err, null);
+                else
+                    console.log(result);
+                if (result.length !== 0) {
+                    console.log("---->" + result[0].login_token);
+                    callback(null, result[0].login_token);
+                }
+
+//                
+                var d = new Date();
+                var curr_date = d.getDate();
+                if (curr_date < 10) {
+                    curr_date = '0' + curr_date;
+                }
+
+                var curr_month = d.getMonth() + 1;
+                if (curr_month < 10) {
+                    curr_month = '0' + curr_month;
+                }
+
+                var curr_year = d.getFullYear();
+                if (curr_year < 10) {
+                    curr_year = '0' + curr_year;
+                }
+            });
+        });
+    }
+
+
+}
+//call Fn for db query with callback
+
+
+//update message status as read
+var msg_read = function (data, callback) {
+    var rec_id = convert2id(data.user2id);
+    var sen_id = 0;
+    getUID("", data.user1id, function (err, data) {
+        if (err) {
+            console.log("ERROR : ", err);
+        } else {
+            pool.getConnection(function (err, connection) {
+                if (err) {
+                    connection.release();
+                    callback(false);
+                    return;
+                }
+                var id1 = data;
+                var id2 = rec_id;
+                connection.query("UPDATE `message_tbl` SET `status`=1 WHERE  (user1id='" + id1 + "' AND user2id='" + id2 + "') OR (user2id='" + id1 + "' AND user1id='" + id2 + "')"), function (err, rows) {
+                    connection.release();
+                };
+                connection.on('error', function (err) {
+                    callback(false);
+                    return;
+                });
+            });
+        }
+    });
+
+};
+
+function checkadminid(email, callback) {
+    console.log("herew" + email);
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            connection.release();
+            callback(false);
+            return;
+        }
+        connection.query('SELECT * FROM users WHERE id = ?', [email], function (err, result)
+        {
+            if (err) {
+                callback(err, null);
+            } else {
+                console.log(result + "result dav");
+                if (result.length !== 0) {
+                    var id = result[0].id;
+                    var type = result[0].usertype;
+                    if (type === "admin") {
+                        callback(0);
+                    } else {
+                        callback(result[0].id);
+                    }
+                    console.log("---->" + result[0].id);
+
+//                return result[0].id;
+                }
+
+            }
+
+        });
+    });
+
+
+}
+;
+
+function changeid(email) {
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            connection.release();
+            callback(false);
+            return;
+        }
+        connection.query('SELECT * FROM users WHERE id = ?', [email], function (err, result)
+        {
+            if (err) {
+                callback(err, null);
+            } else {
+                console.log(result + "result dav");
+                if (result.length !== 0) {
+                    var id = result[0].id;
+                    var type = result[0].usertype;
+                    if (type === "admin") {
+//                     callback(0);
+                        dav = result[0].id;
+                    } else {
+                        dav = result[0].id;
+//                     callback(result[0].id);
+                    }
+                    console.log("---->" + result[0].id);
+
+//                return result[0].id;
+                }
+
+            }
+
+        });
+    });
+
+}
+
+function convert2id(email) {
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            connection.release();
+            callback(false);
+            return;
+        }
+        connection.query('SELECT id FROM users WHERE email = ?', [email], function (err, result)
+        {
+            if (err) {
+                callback(err, null);
+            } else {
+                console.log(result + "result dav");
+                if (result.length !== 0) {
+                    console.log("---->" + result[0].id);
+//                    callback(null, result[0].id);
+                    return result[0].id;
+                }
+
+            }
+
+        });
+    });
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //var port = process.env.port || 3001;
 //console.log(port);
 //app.set('port', process.env.PORT || 3000);
