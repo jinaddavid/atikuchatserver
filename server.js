@@ -704,7 +704,7 @@ function getUID(username, roomCount, callback) {
 //            pokemonImage.src = response.data.sprites.front_default;
         })
         .catch(function (error) {
-          console.log(error)
+          console.log(error+"from api server")
         });
     }
 
