@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Olango Test Chat</title>
+    <title>Atiku forum dommy</title>
 <!--    <script src="socket.io.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -157,12 +157,14 @@ var user_id;
            
 //             
               //    19
-    user_id = "james@gmail.com";
-      sender_name="james";
+//    user_id = "james@gmail.com";
+//      sender_name="james"; 
 //      console.log("current chatting"+user_id)
 //   22
-//        user_id = "wilson@gmail.com";
-// sender_name="ola";
+        user_id = "wilson@gmail.com";
+ sender_name="ola";
+//        user_id = "mymail@gmail.com";
+// sender_name="toriola";
         //    user_id = "19";
     sender = user_id ;//"tosyngy";//;
 //    sender_name = $("#user").val();
@@ -196,8 +198,8 @@ var conThread = function() {
 ////        loca = getState();
 //    }
 
-//    iosocket = io.connect('http://localhost:8080');
-    iosocket = io.connect('https://polar-forest-71145.herokuapp.com/');
+    iosocket = io.connect('http://localhost:8080');
+//    iosocket = io.connect('https://polar-forest-71145.herokuapp.com/');
 //    personal = "checkmate@email.com";
 //    personal = "james@gmail.com";
 //    personal = "wilson@gmail.com";
@@ -258,16 +260,16 @@ console.log("here")
                         message: val,
                         user1id: sender,
                         user1un: sender_name,
-                        user2id: current_chatting,
+//                        user2id: current_chatting,
                         status: 0,
                         time: ""
                     };
-                    iosocket.emit("msgadmin", out);
+                    iosocket.emit("msgforum", out);
                     $('#msg_input_pm').text('');
                 }
             });
            
-  iosocket.on('status_sent', function(msg) {
+  iosocket.on('f_status_sent', function(msg) {
                $('.chats').append($(" <div class='chat'><div class='chat-body'><div class='chat-content' data-toggle='tooltip' title='8:30 am'><p>"+msg.message+"</p></div></div></div>"));
             var wtf = $('#my_chat_body');
             var height = wtf[0].scrollHeight;
@@ -280,7 +282,7 @@ console.log("here")
         $('#chat').prepend($('<p>').text(data.username + ': ' + data.text));
     });
 
-    iosocket.on('message', function(message) {
+    iosocket.on('f_message', function(message) {
 //        alert("u av a new message");
         alert(message.message)
         console.log(message)

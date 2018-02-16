@@ -1,7 +1,7 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 var qs = require('qs');
-var axios=require('axios');
+var axios = require('axios');
 var app = require("express")();
 var mysql = require("mysql");
 var http = require("http").Server(app);
@@ -18,8 +18,9 @@ var allUsersId = [];
 var newUserNotify = [];
 var rec_id, x, y;
 var all_admin_id = [];
+var all_user_id = [];
 var port = process.env.PORT || 8080;
-// var APIURL="http://localhost/atikuApi/";
+//var APIURL = "http://localhost/atikuApi/";
  var APIURL="http://api.atikuvotersapp.org/";
 //var pool = mysql.createPool({
 //    connectionLimit: 100,
@@ -117,7 +118,9 @@ io.on('connection', function (socket) {
 //                else{
 //                     console.log("No Admin Connected");
                 fLen = all_admin_id.length;
+                fLen2 = all_user_id.length;
                 console.log(fLen + "admin size")
+                console.log(fLen2 + "users size")
                 for (i = 0; i < fLen; i++) {
                     console.log(all_admin_id[i] + "this is it")
                 }
@@ -149,7 +152,7 @@ io.on('connection', function (socket) {
         });
     });
 
- 
+
 
     socket.on('pm', function (info) {
         console.log("david here")
@@ -218,9 +221,7 @@ io.on('connection', function (socket) {
                                                 console.log("seningg notificaTIONS__reall not online");
                                                 getMap(data2).emit("status_sent", info);
                                             }
-                                        } 
-                                        
-                                        else {
+                                        } else {
 //                                    console.log("my recever " + generate_id(data2, getUseToken(rec_id)));
 //                                    info['user1id'] = generate_id(data2, getUseToken(rec_id));
                                             console.log("my recever " + getUseToken(rec_id));
@@ -297,7 +298,7 @@ io.on('connection', function (socket) {
                     if (err) {
                         console.log("ERROR : ", err);
                     } else {
-                        
+
                         console.log('iias;' + rec_id);
                         getUID("", info.user1id, function (err, data2) { /// get the user id from db using user login token
                             if (err) {
@@ -329,17 +330,16 @@ io.on('connection', function (socket) {
 
                                         if (getMap(rec_id) == -1) {
                                             console.log("user not online" + rec_id);
-                                             for (i = 0; i < fLen; i++) {
-                                                  if (getMap(all_admin_id[i]) == -1) {
-                                                console.log("Admin not online");
+                                            for (i = 0; i < fLen; i++) {
+                                                if (getMap(all_admin_id[i]) == -1) {
+                                                    console.log("Admin not online");
 
-                                            }
-                                                else{
-                                                       console.log(all_admin_id[i] + "this is it")
-                                                 getMap(all_admin_id[i]).emit("message", info);
+                                                } else {
+                                                    console.log(all_admin_id[i] + "this is it")
+                                                    getMap(all_admin_id[i]).emit("message", info);
                                                 }
-                                                
-                                             
+
+
                                             }
                                             if (getMap(data2) == -1) {
                                                 console.log("u self no dey  online");
@@ -347,28 +347,25 @@ io.on('connection', function (socket) {
                                                 console.log("seningg notificaTIONS");
                                                 getMap(data2).emit("status_sent", info);
                                             }
-                                        }
-                                        
-                                        else {
+                                        } else {
 //                                    console.log("my recever " + generate_id(data2, getUseToken(rec_id)));
 //                                    info['user1id'] = generate_id(data2, getUseToken(rec_id));
                                             console.log("my recever " + getUseToken(rec_id));
 //                                    info['user1id'] = getUseToken(rec_id);
                                             console.log(info + "popoopopopopoopopopo");
                                             for (i = 0; i < fLen; i++) {
-                                                  if (getMap(all_admin_id[i]) == -1) {
-                                                console.log("Admin not online");
+                                                if (getMap(all_admin_id[i]) == -1) {
+                                                    console.log("Admin not online");
 
-                                            }
-                                                else{
-                                                       console.log(all_admin_id[i] + "this is it")
-                                                 getMap(all_admin_id[i]).emit("message", info);
+                                                } else {
+                                                    console.log(all_admin_id[i] + "this is it")
+                                                    getMap(all_admin_id[i]).emit("message", info);
                                                 }
-                                                
-                                             
+
+
                                             }
 
-                                            
+
 
                                             if (getMap(rec_id) == -1) {
                                                 console.log("the Actual admin not online");
@@ -379,6 +376,159 @@ io.on('connection', function (socket) {
                                                 } else {
                                                     console.log("seningg notificaTIONS");
                                                     getMap(data2).emit("status_sent", info);
+                                                }
+                                                console.log("13/09/2019 ->" + getMap(rec_id));
+
+
+                                            }
+                                        }
+
+                                    } else {
+                                        io.emit('error');
+                                    }
+                                });
+
+                            }
+                        });
+
+                    }
+                });
+
+
+//lllllllllllllllll
+            });
+
+
+            check = 'true';
+        }
+    });
+
+    socket.on('msgforum', function (info) {
+        console.log("david here")
+        var check = 'false';
+//         console.log(check+'falseiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+        if (check === 'true') {
+//            alert('trettsssssssssssssssssssssssssssss555555555555ssssssssssssssssssssssssssszzzzzzzzzzz')
+            console.log(check);
+            return;
+        } else {
+
+
+//   console.log('txd3333rettsssssssssssssssssssss4444444444444444ssssssssssssssssssssssssssssssssssssssssssssss');
+            console.log(check);
+            console.log("message...");
+            console.log(info);
+            info.user2id = "testconsole@gmail.com";
+            console.log(info.user2id);
+//        var rec_id = convert2id(info.user2id);
+//        var rec_id = con2id(info.user2id);
+            con2id(info.user2id, function (res) {
+                console.log("ijdddj" + res);
+                rec_id = res;
+
+//            llllllllllllll
+
+
+                console.log(rec_id + "kkkkkkkkkkkkkllllllllllllllllllll");
+//        var rec_id = info.user2id;
+
+                var sen_id = 0;
+
+                getToken("", rec_id, function (err, data) {      /// get the user login token from db using user id       this time email  
+                    if (err) {
+                        console.log("ERROR : ", err);
+                    } else {
+
+                        console.log('iias;' + rec_id);
+                        getUID("", info.user1id, function (err, data2) { /// get the user id from db using user login token
+                            if (err) {
+                                console.log("ERROR : ", err);
+                            } else {
+                                console.log("receiver token:  get the user id from db using user login token" + data + "sender id " + data2);
+//                        console.log("recipient id ->" + generate_id(data2, data));
+//                           checkadminid(data2, function(res) {
+//            console.log("ijdddj" + res);
+//             y=res;
+//        });
+//          checkadminid(rec_id, function(res) {
+//            console.log("ijseconddddj" + res);
+//            x=res;
+//          });
+//                            changeid(data2);
+                                info['user1ida'] = data2;
+                                console.log(data2 + "davdavdavdavdav")
+//                        info['user1ida'] = dav;
+                                info['user2ida'] = rec_id;
+//                        info['user1ida'] = y;
+//                        info['user2ida'] = x;
+                                console.log(data2 + "xactly before safe :" + info.user1id);
+                                add_forum(info, function (res) {
+                                    console.log(res + "-cccc")
+                                    if (res) {
+                                        info["status"] = res.split(":")[0] + ":" + res.split(":")[1];
+                                        console.log("sending message to---> " + info.user2id + ' time= ' + res);
+
+                                        if (getMap(rec_id) == -1) {
+                                            console.log("user not online from forum" + rec_id);
+                                            for (i = 0; i < fLen2; i++) {
+                                                if (getMap(all_user_id[i]) == -1) {
+                                                    console.log("user from  not online");
+
+                                                } else {
+                                                    if (all_user_id[i] === data2) {
+                                                        console.log("can not emit to urself")
+                                                    } else {
+
+                                                        console.log(all_user_id[i] + "this is it all_user_id")
+                                                        getMap(all_user_id[i]).emit("f_message", info);
+                                                    }
+
+                                                }
+
+
+                                            }
+                                            if (getMap(data2) == -1) {
+                                                console.log("u self no dey  online");
+                                            } else {
+                                                console.log("seningg notificaTIONS");
+                                                getMap(data2).emit("f_status_sent", info);
+                                            }
+                                        } else {
+//                                    console.log("my recever " + generate_id(data2, getUseToken(rec_id)));
+//                                    info['user1id'] = generate_id(data2, getUseToken(rec_id));
+                                            console.log("my recever " + getUseToken(rec_id));
+//                                    info['user1id'] = getUseToken(rec_id);
+                                            console.log(info + "popoopopopopoopopopoforum_msg");
+                                            for (i = 0; i < fLen; i++) {
+                                                if (getMap(all_user_id[i]) == -1) {
+                                                    console.log("forum user not online");
+
+                                                } else {
+//                                                       console.log(all_user_id[i] + "this is it")
+//                                                 getMap(all_user_id[i]).emit("f_message", info);
+                                                    if (all_user_id[i] === data2) {
+                                                        console.log("can not emit to urself")
+                                                    } else {
+
+                                                        console.log(all_user_id[i] + "this is it all_user_id")
+                                                        getMap(all_user_id[i]).emit("f_message", info);
+                                                    }
+                                                }
+
+
+                                            }
+
+
+
+                                            if (getMap(rec_id) == -1) {
+                                                console.log("the Actual Adcode reciver not online");
+
+                                            } else {
+                                                if (getMap(data2) == -1) {
+                                                    console.log("u self no dey  online");
+                                                } else {
+                                                    console.log("seningg notificaTIONS");
+                                                    getMap(data2).emit("f_status_sent", info);
                                                 }
                                                 console.log("13/09/2019 ->" + getMap(rec_id));
 
@@ -420,34 +570,7 @@ io.on('connection', function (socket) {
 
 
 
-    socket.on('askym', function (info) {
-        console.log(info);
-        add_status(info, function (res) {
-            if (res) {
-                console.log("sending message to " + info.user2id);
-//            console.log(status);
-                if (getMap(info.user2id) == -1) {
-                    console.log("user not online");
-                    if (getMap(info.user1id) == -1) {
-                        console.log("u self no dey  online");
-                    } else {
-                        console.log("sending message to " + info.user2id);
-                        getMap(info.user1id).emit("status_sent", info);
-//                        return;
-                    }
-                } else {
-                    getMap(info.user2id).emit("askymsg", info);
-                    if (getMap(info.user1id) == -1) {
-                        console.log("u self no dey  online");
-                    } else {
-                        getMap(info.user1id).emit("asky_sent", info);
-                    }
-                }
-            } else {
-                io.emit('error');
-            }
-        });
-    });
+
     socket.on('resypm', function (info) {
         console.log(info);
         add_status(info, function (res) {
@@ -494,6 +617,24 @@ io.on('connection', function (socket) {
         allUsersId.splice(allUsersId.indexOf(uid), 1);
         userList = Object.keys(allusers);
         allUsersId = userList;
+//         all_user_id.splice(all_user_id.indexOf(uid), 1);
+        console.log(all_user_id)
+//        all_user_id
+
+var index=0;
+          var resp= isInArray(uid,all_user_id);
+            if (resp===true) {
+            index= all_user_id.indexOf(uid); 
+//             alert(index)
+                 all_user_id.splice(index, 1);
+                 console.log(all_user_id);
+            }
+            else if (resp===false) {
+//                   all_user_id[all_user_id.length] = new_t;
+                    console.log("U Re   not there self.");
+            }
+            
+
         if (userList.length < 1) {
             console.log("EveryBody is Out")
         }
@@ -509,7 +650,9 @@ io.on('connection', function (socket) {
 });
 
 
-
+function isInArray(value, array) {
+  return array.indexOf(value) > -1;
+}
 
 
 
@@ -531,40 +674,117 @@ var add_status = function (status, callback) {
 //            return;
 //        }
 
-        message = status.message;
-        user1id = status.user1ida;
+    message = status.message;
+    user1id = status.user1ida;
 //        user1id = status.admin_id;
 //        user2id = status.user2ida;
-        user2id = "0";
-        status1 = status.status;
-        var time1 = new Date();
-        var goh = time1.getFullYear() + "-" + (time1.getMonth() + 1) + "-" + time1.getDate();
-        console.log(" getting date  == " + goh);
+    user2id = "0";
+    status1 = status.status;
+    var time1 = new Date();
+    var goh = time1.getFullYear() + "-" + (time1.getMonth() + 1) + "-" + time1.getDate();
+    console.log(" getting date  == " + goh);
 
-        var time2 = new Date();
-        var secon = time2.getHours() + ":" + time2.getMinutes() + ":" + time2.getSeconds();
-        console.log(" getting time == " + secon);
-        console.log(message + user1id + user2id + status);
-        var getting_time = secon;
-        
-          axios.post(APIURL+'savechat',qs.stringify( {
-    message: message,
-    user1id: user1id,
-    user2id: user2id,
-    status1: status1,
-    goh: goh, 
-    secon: secon
-  }))
-  .then(function (response) {
-   console.log(response+"res david")
-     callback(secon);
-  })
-  .catch(function (error) {
-   console.log(error)
-  });
-       
-        
-        
+    var time2 = new Date();
+    var secon = time2.getHours() + ":" + time2.getMinutes() + ":" + time2.getSeconds();
+    console.log(" getting time == " + secon);
+    console.log(message + user1id + user2id + status);
+    var getting_time = secon;
+
+    axios.post(APIURL + 'savechat', qs.stringify({
+        message: message,
+        user1id: user1id,
+        user2id: user2id,
+        status1: status1,
+        goh: goh,
+        secon: secon
+    }))
+            .then(function (response) {
+                console.log(response + "res david")
+                callback(secon);
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+
+
+
+//        var query = "INSERT INTO `message_tbl` (`message`,`user1id`,`user2id`,`status`,`msg_date`,`msg_time`) VALUES ?";
+//        var data = [
+//            [message, user1id, user2id, status1, goh, secon]
+//        ];
+////        console.log("what to sfe " + data);
+//        connection.query(query, [data], function (err, rows) {
+//            connection.release();
+//            if (!err) {
+//                console.log("AKIN--->" + rows.id);
+//                var msgString = JSON.stringify(status);
+////                request.post(
+////                        'http://localhost/medslat/mobile/puShMessage/',
+////                        {form: status},
+////                function(error, response, body) {
+////                    if (!error && response.statusCode === 200) {
+////                        console.log(body);
+////
+////                    }
+////                }
+////                );
+//                callback(secon);
+//            }
+//
+//        });
+//        connection.on('error', function (err) {
+//            callback(false);
+//            return;
+//        });
+//    });
+};
+
+//inserts a message to the database from users
+var add_forum = function (status, callback) {
+//    var user1id,user2id;
+    console.log(status);
+//    pool.getConnection(function (err, connection) {
+//        console.log(err + "-jjjj");
+//        if (err) {
+//            connection.release();
+//            callback(false);
+//            return;
+//        }
+
+    message = status.message;
+    user1id = status.user1ida;
+//        user1id = status.admin_id;
+//        user2id = status.user2ida;
+    user2id = "0";
+    status1 = status.status;
+    var time1 = new Date();
+    var goh = time1.getFullYear() + "-" + (time1.getMonth() + 1) + "-" + time1.getDate();
+    console.log(" getting date  == " + goh);
+
+    var time2 = new Date();
+    var secon = time2.getHours() + ":" + time2.getMinutes() + ":" + time2.getSeconds();
+    console.log(" getting time == " + secon);
+    console.log(message + user1id + user2id + status);
+    var getting_time = secon;
+
+    axios.post(APIURL + 'saveforumchat', qs.stringify({
+        message: message,
+        user1id: user1id,
+        user2id: user2id,
+        status1: status1,
+        goh: goh,
+        secon: secon
+    }))
+            .then(function (response) {
+                console.log(response + "res david from forum")
+                callback(secon);
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+
+
+
 //        var query = "INSERT INTO `message_tbl` (`message`,`user1id`,`user2id`,`status`,`msg_date`,`msg_time`) VALUES ?";
 //        var data = [
 //            [message, user1id, user2id, status1, goh, secon]
@@ -607,49 +827,49 @@ var add_status2 = function (status, callback) {
 //            return;
 //        }
 
-        message = status.message;
+    message = status.message;
 //        user1id = status.user1ida;
-        user1id = status.admin_id; 
-        user2id = status.user2ida;
+    user1id = status.admin_id;
+    user2id = status.user2ida;
 //        user2id = "0";
-        status1 = status.status;
-        var time1 = new Date();
-        var goh = time1.getFullYear() + "-" + (time1.getMonth() + 1) + "-" + time1.getDate();
-        console.log(" getting date  == " + goh);
+    status1 = status.status;
+    var time1 = new Date();
+    var goh = time1.getFullYear() + "-" + (time1.getMonth() + 1) + "-" + time1.getDate();
+    console.log(" getting date  == " + goh);
 
-        var time2 = new Date();
-        var secon = time2.getHours() + ":" + time2.getMinutes() + ":" + time2.getSeconds();
-        console.log(" getting time == " + secon);
-        console.log(message + user1id + user2id + status);
-        var getting_time = secon;
+    var time2 = new Date();
+    var secon = time2.getHours() + ":" + time2.getMinutes() + ":" + time2.getSeconds();
+    console.log(" getting time == " + secon);
+    console.log(message + user1id + user2id + status);
+    var getting_time = secon;
 //        var params = new URLSearchParams();
 //params.append('param1', 'value1');
 //params.append('param2', 'value2');
 
 //axios.post('/foo', qs.stringify({ 'bar': 123 });
-        axios.post(APIURL+'savechat',qs.stringify( {
-    message: message,
-    user1id: user1id,
-    user2id: user2id,
-    status1: status1,
-    goh: goh, 
-    secon: secon
-  }))
-  .then(function (response) {
-   console.log(response+"res david")
-     callback(secon);
-  })
-  .catch(function (error) {
-   console.log(error)
-  });
-        
-        
-        
-        
-        
-        
-        
-        
+    axios.post(APIURL + 'savechat', qs.stringify({
+        message: message,
+        user1id: user1id,
+        user2id: user2id,
+        status1: status1,
+        goh: goh,
+        secon: secon
+    }))
+            .then(function (response) {
+                console.log(response + "res david")
+                callback(secon);
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+
+
+
+
+
+
+
+
 //        var query = "INSERT INTO `message_tbl` (`message`,`user1id`,`user2id`,`status`,`msg_date`,`msg_time`) VALUES ?";
 //        var data = [
 //            [message, user1id, user2id, status1, goh, secon]
@@ -670,7 +890,7 @@ var add_status2 = function (status, callback) {
 ////                    }
 ////                }
 ////                );
-              
+
 //            }
 
 //        });
@@ -689,23 +909,23 @@ function getUID(username, roomCount, callback) {
         console.log("from inside get yuid");
         callback(null, getUseTokenUID(roomCount));
     } else {
-                axios.get(APIURL+"getUIDandtype/"+roomCount)
-        .then(function (response) {
-            console.log(response.data.message)
-                    if (response.data.status==="true"){
-                            console.log("---->" + response.data.message[0].id);
-                    var id = response.data.message[0].id;
-                    var type = response.data.message[0].usertype;
-                    console.log(type)
-                  
-                    callback(null, response.data.message[0].id); 
+        axios.get(APIURL + "getUIDandtype/" + roomCount)
+                .then(function (response) {
+                    console.log(response.data.message)
+                    if (response.data.status === "true") {
+                        console.log("---->" + response.data.message[0].id);
+                        var id = response.data.message[0].id;
+                        var type = response.data.message[0].usertype;
+                        console.log(type)
+
+                        callback(null, response.data.message[0].id);
                     }
 //            pokemonName.innerHTML = response.data.forms[0].name;
 //            pokemonImage.src = response.data.sprites.front_default;
-        })
-        .catch(function (error) {
-          console.log(error+"from api server")
-        });
+                })
+                .catch(function (error) {
+                    console.log(error + "from api server")
+                });
     }
 
 
@@ -715,9 +935,18 @@ function getUIDandtype(username, roomCount, callback) {
 //    getUseTokenUID 
     if (getUseTokenUID(roomCount) !== -1) {
         console.log("from inside get yuid");
+        var myid=getUseTokenUID(roomCount);
+          var resp= isInArray(myid,all_user_id);
+            if (resp===true) {
+     console.log("Dont Know wahts Going On You Dey Inside Already");
+            }
+            else if (resp===false) {
+                   all_user_id[all_user_id.length] = myid;
+                   
+            }
         callback(null, getUseTokenUID(roomCount));
     } else {
-        
+
 //        fetch("http://localhost/atikuApi/getUIDandtype/"+roomCount) // Call the fetch function passing the url of the API as a parameter
 ////.then(function(data) {
 //   .then(function(response) {
@@ -735,28 +964,30 @@ function getUIDandtype(username, roomCount, callback) {
 //    });
 //    
 //    
-      axios.get(APIURL+"getUIDandtype/"+roomCount)
-        .then(function (response) {
-            console.log(response.data.message)
-                    if (response.data.status==="true"){
-                            console.log("---->" + response.data.message[0].id);
-                    var id = response.data.message[0].id;
-                    var type = response.data.message[0].usertype;
-                    console.log(type)
-                    if (type === "admin") {
-                        alladmin[id] = username;
-                        all_admin_id[all_admin_id.length] = id;
-                    }
-                    callback(null, response.data.message[0].id); 
+        axios.get(APIURL + "getUIDandtype/" + roomCount)
+                .then(function (response) {
+                    console.log(response.data.message)
+                    if (response.data.status === "true") {
+                        console.log("---->" + response.data.message[0].id);
+                        var id = response.data.message[0].id;
+                        var type = response.data.message[0].usertype;
+                        console.log(type)
+                        if (type === "admin") {
+                            alladmin[id] = username;
+                            all_admin_id[all_admin_id.length] = id;
+                        } else if (type === "users") {
+                            all_user_id[all_user_id.length] = id;
+                        }
+                        callback(null, response.data.message[0].id);
                     }
 //            pokemonName.innerHTML = response.data.forms[0].name;
 //            pokemonImage.src = response.data.sprites.front_default;
-        })
-        .catch(function (error) {
-          console.log(error)
-        });
+                })
+                .catch(function (error) {
+                    console.log(error)
+                });
 // .then((resp) => resp.json())
-        
+
 //        console.log("get uid " + roomCount);
 //        pool.getConnection(function (err, connection) {
 //            if (err) {
@@ -842,20 +1073,20 @@ var last_seen = function (data, callback) {
         curr_year = '0' + curr_year;
     }
     var current_date = curr_date + "-" + curr_month + "-" + curr_year;
-           axios.post(APIURL+'updatelastseen',qs.stringify( {
-    current_date: current_date,
-    current_time: current_time,
-    data: data
-  }))
-  .then(function (response) {
-   console.log(response+"kile kile")
+    axios.post(APIURL + 'updatelastseen', qs.stringify({
+        current_date: current_date,
+        current_time: current_time,
+        data: data
+    }))
+            .then(function (response) {
+                console.log(response + "kile kile")
 //     callback(secon);
-  })
-  .catch(function (error) {
-   console.log(error)
-                return ;
-  });
-     
+            })
+            .catch(function (error) {
+                console.log(error)
+                return;
+            });
+
 
 //    pool.getConnection(function (err, connection) {
 //        if (err) {
@@ -881,11 +1112,11 @@ var con2id = function (email, callback) {
     console.log("here");
     console.log("here" + email);
     console.log("here");
-     axios.get(APIURL+"getid/"+email)
-        .then(function (response) {
-            console.log(response.data.message)
-                    if (response.data.status==="true"){
-                            console.log("---->" + response.data.message);
+    axios.get(APIURL + "getid/" + email)
+            .then(function (response) {
+                console.log(response.data.message)
+                if (response.data.status === "true") {
+                    console.log("---->" + response.data.message);
 //                    var id = response.data.message[0].id;
 //                    var type = response.data.message[0].usertype;
 //                    console.log(type)
@@ -893,13 +1124,13 @@ var con2id = function (email, callback) {
 //                        alladmin[id] = username;
 //                        all_admin_id[all_admin_id.length] = id;
 //                    }
-                    callback(response.data.message); 
-                    }
- 
-        })
-        .catch(function (error) {
-          console.log(error)
-        });
+                    callback(response.data.message);
+                }
+
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
 //    pool.getConnection(function (err, connection) {
 //        if (err) {
 //            connection.release();
@@ -1047,46 +1278,46 @@ function getToken(username, id, callback)
     } else {
         console.log("from database");
         console.log("get token " + id);
-        
-          axios.get(APIURL+"getemail/"+id)
-        .then(function (response) {
-            console.log(response.data.message)
-                    if (response.data.status==="true"){
-                            console.log("---->" + response.data.message);
+
+        axios.get(APIURL + "getemail/" + id)
+                .then(function (response) {
+                    console.log(response.data.message)
+                    if (response.data.status === "true") {
+                        console.log("---->" + response.data.message);
 //                     callback(response.data.message);    
-callback(null, response.data.message);
-            }
-                
-                var d = new Date();
-                var curr_date = d.getDate();
-                if (curr_date < 10) {
-                    curr_date = '0' + curr_date;
-                }
-
-                var curr_month = d.getMonth() + 1;
-                if (curr_month < 10) {
-                    curr_month = '0' + curr_month;
-                }
-
-                var curr_year = d.getFullYear();
-                if (curr_year < 10) {
-                    curr_year = '0' + curr_year;
+                        callback(null, response.data.message);
                     }
-                  
+
+                    var d = new Date();
+                    var curr_date = d.getDate();
+                    if (curr_date < 10) {
+                        curr_date = '0' + curr_date;
+                    }
+
+                    var curr_month = d.getMonth() + 1;
+                    if (curr_month < 10) {
+                        curr_month = '0' + curr_month;
+                    }
+
+                    var curr_year = d.getFullYear();
+                    if (curr_year < 10) {
+                        curr_year = '0' + curr_year;
+                    }
+
 //                    }
 //                    }
- 
-        })
-        .catch(function (error) {
-          console.log(error)
-        });
-        
-        
-        
-        
-        
-        
-        
+
+                })
+                .catch(function (error) {
+                    console.log(error)
+                });
+
+
+
+
+
+
+
 //        pool.getConnection(function (err, connection) {
 //            if (err) {
 //                connection.release();
@@ -1192,7 +1423,7 @@ function checkadminid(email, callback) {
 
 
 }
-;
+
 
 function changeid(email) {
     pool.getConnection(function (err, connection) {
