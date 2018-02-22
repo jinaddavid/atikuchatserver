@@ -198,8 +198,8 @@ var conThread = function() {
 ////        loca = getState();
 //    }
 
-    iosocket = io.connect('http://localhost:8080');
-//    iosocket = io.connect('https://polar-forest-71145.herokuapp.com/');
+//    iosocket = io.connect('http://localhost:8080');
+    iosocket = io.connect('https://polar-forest-71145.herokuapp.com/');
 //    personal = "checkmate@email.com";
 //    personal = "james@gmail.com";
 //    personal = "wilson@gmail.com";
@@ -260,7 +260,7 @@ console.log("here")
                         message: val,
                         user1id: sender,
                         user1un: sender_name,
-//                        user2id: current_chatting,
+                       topic_id: 2,
                         status: 0,
                         time: ""
                     };

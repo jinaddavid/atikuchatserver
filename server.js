@@ -753,6 +753,7 @@ var add_forum = function (status, callback) {
 
     message = status.message;
     user1id = status.user1ida;
+    topic_id = status.topic_id;
 //        user1id = status.admin_id;
 //        user2id = status.user2ida;
     user2id = "0";
@@ -773,7 +774,8 @@ var add_forum = function (status, callback) {
         user2id: user2id,
         status1: status1,
         goh: goh,
-        secon: secon
+        secon: secon,
+        topic_id: topic_id
     }))
             .then(function (response) {
                 console.log(response + "res david from forum")
